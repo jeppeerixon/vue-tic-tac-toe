@@ -17,7 +17,6 @@ let gameInfo = ref<PlayersInfo>({
 function startGame(playerOne: string, playerTwo: string) {
   gameInfo.value.playerX = playerOne;
   gameInfo.value.playerO = playerTwo;
-  console.log(gameInfo.value.playerX)
   gameState.value = true;
 }
 
