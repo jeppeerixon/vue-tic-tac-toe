@@ -4,6 +4,8 @@ import { ref } from 'vue';
 let playerOne = ref('')
 let playerTwo = ref('')
 
+const emits = defineEmits(["initGame"])
+
 function handleStartClick() {
     console.log('start clicked')
 }
@@ -11,13 +13,13 @@ function handleStartClick() {
 </script>
 
 <template>
-    <h1>Sign Up</h1>
+    <h1>Tic Tac Toe</h1>
     <form @submit.prevent="handleStartClick">
-        <label> Player 1/X:
-            <input type="text" placeholder="Player One" v-model="playerOne">
+        <label> Player X:
+            <input type="text" placeholder="Player X" v-model="playerOne">
         </label>
-        <label> Player 2/O:
-            <input type="text" placeholder="Player One" v-model="playerTwo">
+        <label> Player O:
+            <input type="text" placeholder="Player O" v-model="playerTwo">
         </label>
         <button @click="$emit('initGame', playerOne, playerTwo)">Start</button>
     </form>

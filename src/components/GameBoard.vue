@@ -19,8 +19,8 @@ const possibleWins: Array<Array<number>> = [
 interface IPlayersInfoProps {
     gameInfo: PlayersInfo;
 }
-
 const props = defineProps<IPlayersInfoProps>();
+const emits = defineEmits(["resetAll"])
 
 let playerXTurn = ref<boolean>(true);
 let lastWinner = ref<string>('');
@@ -33,8 +33,8 @@ function checkIfWin(player: string) {
         }
         if (grid.value[threeInARow[0]] === grid.value[threeInARow[1]] && grid.value[threeInARow[1]] === grid.value[threeInARow[2]]) {
             console.log('Player' + player + 'won!!!')
-            playerXTurn.value ? props.gameInfo.playerXwins++ : props.gameInfo.playerOwins++
             endOfGame(player)
+            playerXTurn.value ? props.gameInfo.playerXwins++ : props.gameInfo.playerOwins++
             break
         }
     }
@@ -70,23 +70,37 @@ function handlePlayerClick(e: any) {
 function endOfGame(result: string) {
     if (result === 'draw') {
         lastWinner.value = result;
+        props.gameInfo.draws++
 
     } else {
-        lastWinner.value = result + 'vann!';
+        lastWinner.value = result + ' vann!';
     }
-    (document.querySelector('.gridContainer') as HTMLDivElement).style.pointerEvents = 'none';
+    toggleBoard('none')
     props.gameInfo.gameOver = true;
+}
+
+function restartGame() {
+    grid.value = ['', '', '', '', '', '', '', '', ''];
+    props.gameInfo.gameOver = false;
+    toggleBoard('auto')
+}
+
+function toggleBoard(value: string) {
+    let allGrids = document.querySelectorAll('.gridCell') as NodeListOf<HTMLDivElement>;
+    allGrids.forEach(div => {
+        div.style.pointerEvents = value;
+    })
 }
 
 </script>
 
 <template>
-    <h1>GameBoard</h1>
-    <h3 v-if="playerXTurn">
-        Varsegod {{ props.gameInfo.playerX }}, X tur att köra:
-    </h3>
-    <h3 v-else-if="props.gameInfo.gameOver">
+    <h1>Tic Tac Toe</h1>
+    <h3 v-if="props.gameInfo.gameOver">
         Game Over! {{ lastWinner }}
+    </h3>
+    <h3 v-else-if="playerXTurn">
+        Varsegod {{ props.gameInfo.playerX }}, X tur att köra:
     </h3>
     <h3 v-else>
         Varsegod {{ props.gameInfo.playerO }}, O tur att köra:
@@ -95,6 +109,11 @@ function endOfGame(result: string) {
         <div v-for="(cell, index) in grid" :value="index" class="gridCell" @click="handlePlayerClick">
             {{ cell }}
         </div>
+    </div>
+    <br>
+    <div class="gameControls">
+        <button @click="restartGame">Start New Game</button>
+        <button @click="$emit('resetAll')">Change Players</button>
     </div>
     <ScoreBoard :gameInfo="props.gameInfo" />
 </template>

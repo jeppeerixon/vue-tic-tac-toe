@@ -10,13 +10,16 @@
 </script>
 
 <template>
-    <h1>Highscore:</h1>
-    <h3>
+    <h2>Score:</h2>
+    <h5>
         {{ props.gameInfo.playerX }}: {{ props.gameInfo.playerXwins }} wins
-    </h3>
-    <h3>
+    </h5>
+    <h5>
         {{ props.gameInfo.playerO }}: {{ props.gameInfo.playerOwins }} wins
-    </h3>
+    </h5>
+    <h5>
+        Draws: {{ props.gameInfo.draws }} 
+    </h5>
   
 </template>
 
