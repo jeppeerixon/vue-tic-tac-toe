@@ -10,7 +10,8 @@ let gameInfo = ref<PlayersInfo>({
   playerXwins: 0,
   playerO: '',
   playerOwins: 0,
-  gameStart: false,
+  draws: 0,
+  gameOver: false,
   value: undefined
 })
 
@@ -25,9 +26,8 @@ let gameState = ref<boolean>(false);
 </script>
 
 <template>
-  <SignUp @init-game="startGame" />
   <GameBoard v-if="gameState" :gameInfo="gameInfo" />
-  <GameOptions />
+  <SignUp v-else @init-game="startGame" />
 </template>
 
 <style scoped></style>

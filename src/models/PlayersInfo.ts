@@ -5,5 +5,6 @@ export class PlayersInfo {
         public playerXwins: number,
         public playerO: string,
         public playerOwins: number,
-        public gameStart: boolean) { }
+        public draws: number,
+        public gameOver: boolean) { }
 }

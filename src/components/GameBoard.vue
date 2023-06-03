@@ -23,6 +23,7 @@ interface IPlayersInfoProps {
 const props = defineProps<IPlayersInfoProps>();
 
 let playerXTurn = ref<boolean>(true);
+let lastWinner = ref<string>('');
 
 function checkIfWin(player: string) {
     for (let i = 0; i <= 7; i++) {
@@ -32,7 +33,8 @@ function checkIfWin(player: string) {
         }
         if (grid.value[threeInARow[0]] === grid.value[threeInARow[1]] && grid.value[threeInARow[1]] === grid.value[threeInARow[2]]) {
             console.log('Player' + player + 'won!!!')
-            playerXTurn ? props.gameInfo.playerXwins++ : props.gameInfo.playerOwins++
+            playerXTurn.value ? props.gameInfo.playerXwins++ : props.gameInfo.playerOwins++
+            endOfGame(player)
             break
         }
     }
@@ -46,10 +48,9 @@ function checkIfTie() {
             sum++
         }
         if (sum === 9 ) {
-            console.log('det blev lika: ggwp')
+            endOfGame('draw')
         }
     })
-
 }
 
 function handlePlayerClick(e: any) {
@@ -62,19 +63,34 @@ function handlePlayerClick(e: any) {
         checkIfWin(props.gameInfo.playerO);
     }
     playerXTurn.value = !playerXTurn.value;
+    e.target.style.pointerEvents = 'none'
     checkIfTie();
+}
+
+function endOfGame(result: string) {
+    if (result === 'draw') {
+        lastWinner.value = result;
+
+    } else {
+        lastWinner.value = result + 'vann!';
+    }
+    (document.querySelector('.gridContainer') as HTMLDivElement).style.pointerEvents = 'none';
+    props.gameInfo.gameOver = true;
 }
 
 </script>
 
 <template>
     <h1>GameBoard</h1>
-    <p v-if="playerXTurn">
+    <h3 v-if="playerXTurn">
         Varsegod {{ props.gameInfo.playerX }}, X tur att köra:
-    </p>
-    <p v-else>
+    </h3>
+    <h3 v-else-if="props.gameInfo.gameOver">
+        Game Over! {{ lastWinner }}
+    </h3>
+    <h3 v-else>
         Varsegod {{ props.gameInfo.playerO }}, O tur att köra:
-    </p>
+    </h3>
     <div class="gridContainer">
         <div v-for="(cell, index) in grid" :value="index" class="gridCell" @click="handlePlayerClick">
             {{ cell }}
