@@ -1,7 +1,29 @@
+<template>
+    <h1>Tic Tac Toe</h1>
+    <h3 v-if="props.gameInfo.gameOver">
+        Game Over! {{ lastWinner }}
+    </h3>
+    <h3 v-else-if="playerXTurn">
+        Varsegod {{ props.gameInfo.playerX }}, X tur att köra:
+    </h3>
+    <h3 v-else>
+        Varsegod {{ props.gameInfo.playerO }}, O tur att köra:
+    </h3>
+    <div class="gridContainer">
+        <div v-for="(cell, index) in grid" :value="index" class="gridCell" @click="handlePlayerClick">
+            {{ cell }}
+        </div>
+    </div>
+    <br>
+    <div class="gameControls">
+        <button @click="restartGame">Start New Game</button>
+        <button @click="$emit('resetAll')">Change Players</button>
+    </div>
+</template>
+
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { PlayersInfo } from '../models/PlayersInfo';
-import ScoreBoard from './ScoreBoard.vue';
 
 let grid = ref<Array<string>>(['', '', '', '', '', '', '', '', '']);
 
@@ -105,30 +127,6 @@ onMounted(() => {
   }
 
 </script>
-
-<template>
-    <h1>Tic Tac Toe</h1>
-    <h3 v-if="props.gameInfo.gameOver">
-        Game Over! {{ lastWinner }}
-    </h3>
-    <h3 v-else-if="playerXTurn">
-        Varsegod {{ props.gameInfo.playerX }}, X tur att köra:
-    </h3>
-    <h3 v-else>
-        Varsegod {{ props.gameInfo.playerO }}, O tur att köra:
-    </h3>
-    <div class="gridContainer">
-        <div v-for="(cell, index) in grid" :value="index" class="gridCell" @click="handlePlayerClick">
-            {{ cell }}
-        </div>
-    </div>
-    <br>
-    <div class="gameControls">
-        <button @click="restartGame">Start New Game</button>
-        <button @click="$emit('resetAll')">Change Players</button>
-    </div>
-    <ScoreBoard :gameInfo="props.gameInfo" />
-</template>
 
 <style scoped>
     .gridContainer {

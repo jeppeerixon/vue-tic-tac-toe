@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import SignUp from './components/SignUp.vue';
   import GameBoard from './components/GameBoard.vue';
-  import GameOptions from './components/GameOptions.vue';
+  import ScoreBoard from './components/ScoreBoard.vue';
   import { onMounted, ref } from 'vue';
   import { PlayersInfo } from './models/PlayersInfo';
 
@@ -54,6 +54,7 @@
 <template>
   <GameBoard v-if="gameInfo.gameStarted" :gameInfo="gameInfo" @reset-all="resetGame" />
   <SignUp v-else @init-game="startGame" />
+  <ScoreBoard v-if="gameInfo.gameStarted" :gameInfo="gameInfo" />
 </template>
 
 <style scoped></style>
