@@ -15,12 +15,14 @@ function handleStartClick() {
 <template>
     <h1>Tic Tac Toe</h1>
     <form @submit.prevent="handleStartClick">
+        <div>
         <label> Player X:
             <input type="text" placeholder="Player X" v-model="playerOne">
         </label>
         <label> Player O:
             <input type="text" placeholder="Player O" v-model="playerTwo">
         </label>
+        </div>        
         <button @click="$emit('initGame', playerOne, playerTwo)">Start</button>
     </form>
 </template>

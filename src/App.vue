@@ -20,7 +20,7 @@
     gameInfo.value.playerX = playerOne;
     gameInfo.value.playerO = playerTwo;
     gameInfo.value.gameStarted = true;
-    setLocalStorageContent()
+    localStorage.setItem('playerData', JSON.stringify(gameInfo.value))
   }
 
   function resetGame() {
@@ -34,18 +34,16 @@
       gameOver: false,
       value: undefined
     }
+    localStorage.removeItem('playerData');
+    localStorage.removeItem('gameData');
   }
 
   onMounted(() => {
-      loadLocalStorageContent()
+      loadLocalPlayerData()
   })
-    
-  function setLocalStorageContent() {
-    localStorage.setItem('ticTacToe', JSON.stringify(gameInfo.value))
-  }
   
-  function loadLocalStorageContent() {
-    let gameInfoString = localStorage.getItem('ticTacToe')
+  function loadLocalPlayerData() {
+    let gameInfoString = localStorage.getItem('playerData')
     if (gameInfoString != null) {
       gameInfo.value = JSON.parse(gameInfoString)
     }

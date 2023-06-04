@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { PlayersInfo } from '../models/PlayersInfo';
 import ScoreBoard from './ScoreBoard.vue';
 
@@ -32,9 +32,8 @@ function checkIfWin(player: string) {
             continue;
         }
         if (grid.value[threeInARow[0]] === grid.value[threeInARow[1]] && grid.value[threeInARow[1]] === grid.value[threeInARow[2]]) {
-            console.log('Player' + player + 'won!!!')
-            endOfGame(player)
             playerXTurn.value ? props.gameInfo.playerXwins++ : props.gameInfo.playerOwins++
+            endOfGame(player)            
             break
         }
     }
@@ -64,6 +63,7 @@ function handlePlayerClick(e: any) {
     }
     playerXTurn.value = !playerXTurn.value;
     e.target.style.pointerEvents = 'none'
+    localStorage.setItem('gameData', JSON.stringify(grid.value))
     checkIfTie();
 }
 
@@ -76,7 +76,8 @@ function endOfGame(result: string) {
         lastWinner.value = result + ' vann!';
     }
     toggleBoard('none')
-    props.gameInfo.gameOver = true;
+    localStorage.setItem('playerData', JSON.stringify(props.gameInfo))
+    props.gameInfo.gameOver = true;    
 }
 
 function restartGame() {
@@ -91,6 +92,17 @@ function toggleBoard(value: string) {
         div.style.pointerEvents = value;
     })
 }
+
+onMounted(() => {
+      loadLocalGameData()
+  })
+  
+  function loadLocalGameData() {
+    let gridInfoString = localStorage.getItem('gameData')
+    if (gridInfoString != null) {
+      grid.value = JSON.parse(gridInfoString)
+    }
+  }
 
 </script>
 
@@ -119,17 +131,21 @@ function toggleBoard(value: string) {
 </template>
 
 <style scoped>
-.gridContainer {
-    display: grid;
-    gap: 5px;
-    grid-template-columns: repeat(3, 1fr);
-}
+    .gridContainer {
+        display: grid;
+        gap: 5px;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+    }
 
-.gridCell {
-    padding: 30px 10px;
-    border-radius: 3px;
-    background-color: whitesmoke;
-    border: solid 2px black;
-
-}
+    .gridCell {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 90px;
+        min-width: 50px;
+        border-radius: 3px;
+        background-color: whitesmoke;
+        border: solid 2px black;
+    }
 </style>
